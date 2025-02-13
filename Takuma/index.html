@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Takuma.Portfolio</title>
+    <!-- Google FontsからPlayfair DisplayとPoppinsをインポート -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            position: relative;
+            overflow-y: auto;
+            transition: background-color 1s ease;
+        }
+        #background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 2s ease;
+        }
+        /* ヘッダー */
+        #header {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 20px;
+            font-size: 1.2em;
+            font-family: "Playfair Display", serif;
+        }
+        #header a {
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        #header a:hover {
+            color: #555;
+            transform: scale(1.2);
+        }
+        #welcome {
+            font-family: "Playfair Display", serif;
+            font-size: 4em;
+            margin-top: 50px;
+            color: black;
+            opacity: 0.8;
+            position: relative;
+            cursor: pointer;
+            display: inline-block; /* インライン表示に変更 */
+        }
+        #welcome:hover {
+            transform: scale(1.2);
+        }
+        .letter {
+            opacity: 0;
+            display: inline-block;
+            transition: opacity 0.5s ease-in-out;
+            margin-right: 5px; /* 各文字間のスペースを追加 */
+        }
+
+        @keyframes scatter {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--random-x), var(--random-y));
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .section {
+            margin: 50px 0;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section h2 {
+            font-family: "Playfair Display", serif;
+            position: relative;
+        }
+        .section h2:hover {
+            transform: scale(1.2);
+        }
+        /* アンダーライン */
+        .underline-text {
+            text-decoration: underline;
+        }
+        #works-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        .work-box {
+            width: 30%;
+            height: 150px;
+            background-color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Poppins", sans-serif;
+            font-size: 1.2em;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+        .work-box:hover {
+            transform: scale(1.05);
+            background-color: #bbb;
+        }
+        .work-box span {
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+        #contact {
+            margin: 50px 0;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+        }
+        #contact img {
+            width: 200px;
+            height: auto;
+        }
+        #contact a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        #portfolioText {
+            font-family: "Playfair Display", serif;
+            font-size: 2em;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+    </style>
+</head>
+<body>
+    <video id="background-video" autoplay loop muted>
+        <source src="4545.mp4" type="video/mp4">
+        お使いのブラウザは動画タグをサポートしていません。
+    </video>
+    
+    <div id="header">
+        <a href="#about">About me</a>
+        <a href="#skill">Skill</a>
+        <a href="#works">Works</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+    <h1 id="welcome"></h1>
+    <div id="portfolioText">Takuma.Portfolio</div>
+
+    <div class="section" id="about">
+        <h2 class="underline-text">About me</h2>
+        <p>2024年国際基督教大学教養学部情報科学専攻卒業</p>
+        <p>大学在学時にはプロダクションにてモデル活動のち芸能マネージャーを経験</p>
+        <p>大学卒業後は新卒でコンサルティング会社に入社</p>
+    </div>
+    
+    <div class="section" id="skill">
+        <h2 class="underline-text">Skill</h2>
+        <p>HTML/CSS/JavaScript/Python</p>
+        <p>WordPress/Canva</p>
+        <p>システム導入支援</p>
+    </div>
+    
+    <div class="section" id="works">
+        <h2 class="underline-text">Works</h2>
+        <div id="works-container">
+            <div class="work-box">
+                <div></div>
+                <span>社内人事システム</span>
+            </div>
+            <div class="work-box">
+                <div></div>
+                <span>Webサイト開発</span>
+            </div>
+            <div class="work-box">
+                <div></div>
+                <span>アプリ開発</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="contact" class="section">
+        <img src="5757.png" alt="Contact Image">
+        <p>
+            <a href="mailto:heydayheydayheydaya@gmail.com">Gmail</a> |
+            <a href="https://www.instagram.com/h.e.y.day" target="_blank">Instagram</a>
+        </p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(() => {
+                document.getElementById('background-video').style.opacity = 1;
+                document.body.style.backgroundColor = "#fff";
+            }, 2000);
+
+            let welcomeText = "WelcomeMyPage";
+            let welcomeElement = document.getElementById("welcome");
+
+            // 文字を分割して追加
+            welcomeText.split("").forEach((char, index) => {
+                let span = document.createElement("span");
+                span.textContent = char;
+                span.classList.add("letter");
+                welcomeElement.appendChild(span);
+
+                // ランダムな位置を設定
+                let randomX = Math.floor(Math.random() * 300) - 150; // -150px から 150px の範囲
+                let randomY = Math.floor(Math.random() * 300) - 150; // 同上
+                span.style.setProperty('--random-x', `${randomX}px`);
+                span.style.setProperty('--random-y', `${randomY}px`);
+
+                // 文字の表示を遅らせる（すべての文字が表示されるまで待つ）
+                setTimeout(() => {
+                    span.style.opacity = "1";
+                }, index * 300);  // 文字ごとに少し遅らせる
+            });
+
+            // すべての文字が表示された後にバラバラになる
+            setTimeout(() => {
+                let letters = document.querySelectorAll(".letter");
+                letters.forEach((letter) => {
+                    letter.style.animation = `scatter 1s forwards`;
+                });
+            }, welcomeText.length * 300); // 文字が表示された後にバラバラアニメーションを開始
+
+            // Takuma.Portfolioを表示
+            setTimeout(() => {
+                document.getElementById('portfolioText').style.opacity = 1;
+            }, welcomeText.length * 300 + 1000); // バラバラのアニメーション後に表示
+
+            // セクションが表示されるアニメーション
+            let sections = document.querySelectorAll('.section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.classList.add('show');
+                }, (index + 1) * 1000);
+            });
+
+            const links = document.querySelectorAll('#header a');
+            links.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 50,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            welcomeElement.addEventListener("click", function() {
+                location.reload();
+            });
+        });
+    </script>
+</body>
+</html>
