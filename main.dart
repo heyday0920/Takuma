@@ -17,7 +17,7 @@ class RestaurantSwipeApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: LoginScreen(), // エントリポイントをLoginScreenに変更
       theme: ThemeData(
-        fontFamily: 'NotoSansJP', // pubspec.yamlで設定したフォントファミリー名
+        fontFamily: 'Roboto', // pubspec.yamlで設定したフォントファミリー名
       ),
     );
   }
@@ -50,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(title: Text("ログイン")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -60,7 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: "メールアドレス",
-                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.email),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
               ),
             ),
             SizedBox(height: 16),
@@ -68,12 +70,22 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: _passwordController,
               decoration: InputDecoration(
                 labelText: "パスワード",
-                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.lock),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
               ),
               obscureText: true, // パスワードを隠す
             ),
             SizedBox(height: 16),
-            ElevatedButton(onPressed: _login, child: Text("ログイン")),
+            ElevatedButton(
+              onPressed: _login,
+              child: Text("ログイン"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueGrey[700],
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                textStyle: TextStyle(fontSize: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0))
+              ),
+            ),
           ],
         ),
       ),
@@ -232,7 +244,7 @@ class _RestaurantSwipeScreenState extends State<RestaurantSwipeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("飲食店スワイプ"),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.blueGrey[700],
       ),
       body:
           isLoading
@@ -253,19 +265,20 @@ class _RestaurantSwipeScreenState extends State<RestaurantSwipeScreen> {
 
                         return Center(
                           child: Material(
-                            elevation: 20,
-                            borderRadius: BorderRadius.circular(24),
+                            elevation: 8.0,
+                            borderRadius: BorderRadius.circular(28.0),
+                            shadowColor: Colors.grey.withOpacity(0.5),
                             color: Colors.white,
                             child: Container(
                               width: 350,
-                              padding: EdgeInsets.all(20),
+                              padding: const EdgeInsets.all(24.0),
                               child: SingleChildScrollView(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
+                                      borderRadius: BorderRadius.circular(18.0),
                                       child: Image.network(
                                         restaurant["image_url"] ?? "",
                                         height: 180,
@@ -517,7 +530,7 @@ class _RestaurantSwipeScreenState extends State<RestaurantSwipeScreen> {
                             _controller.swipe(CardSwiperDirection.right);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.pinkAccent,
+                            backgroundColor: Colors.greenAccent[400],
                             minimumSize: Size(120, 50),
                           ),
                           child: Text("LIKE", style: TextStyle(fontSize: 18)),
@@ -553,54 +566,64 @@ class RecommendedScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
-            appBar: AppBar(title: Text("あなたへのおすすめ")),
+            appBar: AppBar(title: Text("あなたへのおすすめ"), backgroundColor: Colors.blueGrey[700]),
             body: Center(child: CircularProgressIndicator()),
           );
         }
         if (snapshot.hasError) {
           return Scaffold(
-            appBar: AppBar(title: Text("あなたへのおすすめ")),
-            body: Center(child: Text("おすすめの取得中にエラーが発生しました: ${snapshot.error}")),
+            appBar: AppBar(title: Text("あなたへのおすすめ"), backgroundColor: Colors.blueGrey[700]),
+            body: Center(child: Text("おすすめの取得中にエラーが発生しました: ${snapshot.error}", style: TextStyle(fontSize: 16, color: Colors.red[700]))),
           );
         }
         final recommended = snapshot.data!;
         return Scaffold(
-          appBar: AppBar(title: Text("あなたへのおすすめ")),
+          appBar: AppBar(title: Text("あなたへのおすすめ"), backgroundColor: Colors.blueGrey[700]),
           body:
               recommended.isEmpty
-                  ? Center(child: Text("条件に合うおすすめ店舗が見つかりませんでした"))
+                  ? Center(child: Text("条件に合うおすすめ店舗が見つかりませんでした", style: TextStyle(fontSize: 16, color: Colors.grey[800])))
                   : ListView.builder(
                     itemCount: recommended.length,
                     itemBuilder: (context, index) {
                       final shop = recommended[index];
-                      return Card(
-                        margin: EdgeInsets.all(12),
-                        child: ListTile(
-                          leading: Image.network(
-                            shop["image_url"] ?? "",
-                            width: 60,
-                            height: 60,
-                            fit: BoxFit.cover,
-                            errorBuilder:
-                                (context, error, stackTrace) => Container(
-                                  width: 60,
-                                  height: 60,
-                                  color: Colors.grey[200],
-                                  child: Icon(
-                                    Icons.restaurant,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                          ),
-                          title: Text(shop["name"] ?? ""),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("評価: ${shop["rating"] ?? "-"}"),
-                              Text(shop["address"] ?? ""),
-                              if ((shop["phone"] ?? "").isNotEmpty)
-                                Text("電話: ${shop["phone"]}"),
-                            ],
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                        child: Card(
+                          elevation: 4.0,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                          margin: EdgeInsets.all(12),
+                          child: ListTile(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                shop["image_url"] ?? "",
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.cover,
+                                errorBuilder:
+                                    (context, error, stackTrace) => Container(
+                                      width: 60,
+                                      height: 60,
+                                      color: Colors.grey[200],
+                                      child: Icon(
+                                        Icons.restaurant,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                              ),
+                            ),
+                            title: Text(shop["name"] ?? "", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("評価: ${shop["rating"] ?? "-"}", style: TextStyle(fontSize: 14)),
+                                SizedBox(height: 4),
+                                Text(shop["address"] ?? "", style: TextStyle(fontSize: 13, color: Colors.grey[700])),
+                                SizedBox(height: 4),
+                                if ((shop["phone"] ?? "").isNotEmpty)
+                                  Text("電話: ${shop["phone"]}", style: TextStyle(fontSize: 13, color: Colors.grey[700])),
+                              ],
+                            ),
                           ),
                         ),
                       );
